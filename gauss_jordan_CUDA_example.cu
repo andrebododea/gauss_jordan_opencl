@@ -131,6 +131,7 @@ int main()
 	if (err != cudaSuccess){ cout << cudaGetErrorString(err) << " in " << __FILE__ << " at line " << __LINE__ << endl; }
 	I = new double[n*n];
 
+	// Create identity matrix
 	for (int i = 0; i<n; i++){
 		for (int j = 0; j<n; j++){
 			if (i == j) I[i*n + i] = 1.0;
