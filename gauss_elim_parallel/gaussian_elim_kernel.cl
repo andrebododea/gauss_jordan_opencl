@@ -3,7 +3,7 @@
  * Matrix multiplication: C = A * B.
  * Device code.
  */
- A
+ 
 // OpenCL Kernel
 __kernel void matrixMul(__global float* C, 
           __global float* A, 
@@ -31,28 +31,9 @@ __kernel void matrixMul(__global float* C,
 
 
 
-
+// Just testing functionality of a second kernel: hello_world
 __kernel void
-matrixMul(__global float* C, 
-          __global float* A, 
-          __global float* B, 
-          int wA, int wB)
+hello_world(int wA, int wB)
 {
-  
-   int tx = get_global_id(0); 
-   int ty = get_global_id(1);
- 
-   // value stores the element that is 
-   // computed by the thread
-   float value = 0;
-   for (int k = 0; k < wA; ++k)
-   {
-      float elementA = A[ty * wA + k];
-      float elementB = B[k * wB + tx];
-      value += elementA * elementB;
-   }
- 
-   // Write the matrix to device memory each 
-   // thread writes one element
-   C[ty * wA + tx] = value;
+  printf("Alright guvna\n");
 }

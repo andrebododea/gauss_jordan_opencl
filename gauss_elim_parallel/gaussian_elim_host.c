@@ -184,7 +184,6 @@ int main(int argc, char** argv)
    }
 
    // Create the compute kernel in the program we wish to run
-   //
    kernel = clCreateKernel(program, "matrixMul", &err);
    if (!kernel || err != CL_SUCCESS)
    {
@@ -261,6 +260,62 @@ int main(int argc, char** argv)
 */
   
    printf("Matrix multiplication completed...\n"); 
+
+
+
+
+   /* Begin print_test kernel */
+
+
+   // Create the compute kernel in the program we wish to run
+   kernel = clCreateKernel(program, "hello_world", &err);
+   if (!kernel || err != CL_SUCCESS)
+   {
+       printf("Error: Failed to create compute kernel!\n");
+       exit(1);
+   }
+
+   //Launch OpenCL kernel
+
+  // Setting arguments for the kernel
+   err = clSetKernelArg(kernel, 0, sizeof(int), 2) 
+   err |= clSetKernelArg(kernel, 1, sizeof(int), 4);
+
+   if (err != CL_SUCCESS)
+   {
+       printf("Error: Failed to set kernel arguments! %d\n", err);
+       exit(1);
+   }
+ 
+   // Set local and global work sizes (this is already done earlier)
+   /*
+   localWorkSize[0] = 16;
+   localWorkSize[1] = 16;
+   globalWorkSize[0] = 1024;
+   globalWorkSize[1] = 1024;
+   */
+
+
+
+   // This is where execution of the kernel is actually done
+   err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+
+   if (err != CL_SUCCESS)
+   {
+       printf("Error: Failed to execute kernel! %d\n", err);
+       exit(1);
+   }
+ 
+   //Retrieve result from device
+   /* err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+
+   if (err != CL_SUCCESS)
+   {
+       printf("Error: Failed to read output array! %d\n", err);
+       exit(1);
+   }
+   */
+
 
    //Shutdown and cleanup
    free(h_A);
