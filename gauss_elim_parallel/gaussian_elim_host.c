@@ -158,7 +158,7 @@ int main(int argc, char** argv)
    char *KernelSource;
    long lFileSize;
 
-   lFileSize = LoadOpenCLKernel("matrixmul_kernel.cl", &KernelSource);
+   lFileSize = LoadOpenCLKernel("gaussian_elim_kernel.cl", &KernelSource);
    if( lFileSize < 0L ) {
        perror("File read failed");
        return 1;
@@ -260,15 +260,21 @@ int main(int argc, char** argv)
 */
   
    printf("Matrix multiplication completed...\n"); 
-
-
+ 
+   // Cleanup
+   free(h_A);
+   free(h_B);
+   free(h_C);
+ 
+   clReleaseMemObject(d_A);
+   clReleaseMemObject(d_C);
+   clReleaseMemObject(d_B);
 
 
    /* Begin print_test kernel */
 
-
    // Create the compute kernel in the program we wish to run
-   kernel = clCreateKernel(program, "hello_world", &err);
+   kernel = clCreateKernel(program, "helloWorld", &err);
    if (!kernel || err != CL_SUCCESS)
    {
        printf("Error: Failed to create compute kernel!\n");
@@ -278,8 +284,11 @@ int main(int argc, char** argv)
    //Launch OpenCL kernel
 
   // Setting arguments for the kernel
-   err = clSetKernelArg(kernel, 0, sizeof(int), 2) 
-   err |= clSetKernelArg(kernel, 1, sizeof(int), 4);
+   int a=0;
+   int b;  
+ 
+   err = clSetKernelArg(kernel, 0, sizeof(a), (void *)&a); 
+   err |= clSetKernelArg(kernel, 1, sizeof(b), (void *)&b);
 
    if (err != CL_SUCCESS)
    {
@@ -288,13 +297,12 @@ int main(int argc, char** argv)
    }
  
    // Set local and global work sizes (this is already done earlier)
-   /*
+  /* 
    localWorkSize[0] = 16;
    localWorkSize[1] = 16;
    globalWorkSize[0] = 1024;
    globalWorkSize[1] = 1024;
    */
-
 
 
    // This is where execution of the kernel is actually done
@@ -307,25 +315,17 @@ int main(int argc, char** argv)
    }
  
    //Retrieve result from device
-   /* err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+   err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
 
    if (err != CL_SUCCESS)
    {
        printf("Error: Failed to read output array! %d\n", err);
        exit(1);
    }
-   */
+   
 
 
    //Shutdown and cleanup
-   free(h_A);
-   free(h_B);
-   free(h_C);
- 
-   clReleaseMemObject(d_A);
-   clReleaseMemObject(d_C);
-   clReleaseMemObject(d_B);
-
    clReleaseProgram(program);
    clReleaseKernel(kernel);
    clReleaseCommandQueue(commands);

@@ -32,8 +32,7 @@ __kernel void matrixMul(__global float* C,
 
 
 // Just testing functionality of a second kernel: hello_world
-__kernel void
-hello_world(int wA, int wB)
+__kernel void helloWorld(int a, int b)
 {
-  printf("Alright guvna\n");
+  a += 1; 
 }
