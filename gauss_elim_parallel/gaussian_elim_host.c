@@ -13,10 +13,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #define WA 1024
-#define HA 1024
-#define WB 1024
+#define HA 1025
 
+#define WB 1024
 #define HB WA
+
 #define WC WB
 #define HC HA
 ////////////////////////////////////////////////////////////////////////////////
@@ -107,14 +108,9 @@ int main(int argc, char** argv)
    unsigned int size_A = WA * HA;
    unsigned int mem_size_A = sizeof(float) * size_A;
    float* h_A = (float*) malloc(mem_size_A);
- 
-   unsigned int size_B = WB * HB;
-   unsigned int mem_size_B = sizeof(float) * size_B;
-   float* h_B = (float*) malloc(mem_size_B);
 
    //Initialize host memory
    randomMemInit(h_A, size_A);
-   randomMemInit(h_B, size_B);
  
    //Allocate host memory for the result C
    unsigned int size_C = WC * HC;
