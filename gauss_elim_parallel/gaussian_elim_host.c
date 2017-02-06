@@ -12,11 +12,8 @@
 #include <stdbool.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-#define WA 1024
-#define HA 1025
-
-#define WB 1024
-#define HB WA
+#define WA 1025
+#define HA 1024
 
 #define WC WB
 #define HC HA
@@ -98,7 +95,6 @@ int main(int argc, char** argv)
 
     // OpenCL device memory for matrices
    cl_mem d_A;
-   cl_mem d_B;
    cl_mem d_C;
 
    // set seed for rand()
@@ -190,7 +186,6 @@ int main(int argc, char** argv)
    // Create the input and output arrays in device memory for our calculation
    d_C = clCreateBuffer(context, CL_MEM_READ_WRITE, mem_size_A, NULL, &err);
    d_A = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, mem_size_A, h_A, &err);
-   d_B = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, mem_size_B, h_B, &err);
 
    if (!d_A || !d_B || !d_C)
    {
@@ -198,7 +193,9 @@ int main(int argc, char** argv)
        exit(1);
    }    
     
-   printf("Running matrix multiplication for matrices A (%dx%d) and B (%dx%d) ...\n", WA,HA,WB,HB); 
+
+
+
 
    //Launch OpenCL kernel
    size_t localWorkSize[2], globalWorkSize[2];
@@ -206,41 +203,13 @@ int main(int argc, char** argv)
    int wA = WA;
    int wC = WC;
 
-   // Setting arguments for the kernel
-   err = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&d_C);
-   err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), (void *)&d_A);
-   err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void *)&d_B);
-   err |= clSetKernelArg(kernel, 3, sizeof(int), (void *)&wA);
-   err |= clSetKernelArg(kernel, 4, sizeof(int), (void *)&wC);
-
-   if (err != CL_SUCCESS)
-   {
-       printf("Error: Failed to set kernel arguments! %d\n", err);
-       exit(1);
-   }
- 
+   // Set local and global work sizes
    localWorkSize[0] = 16;
    localWorkSize[1] = 16;
    globalWorkSize[0] = 1024;
    globalWorkSize[1] = 1024;
  
-   // This is where execution of the kernel is actually done
-   err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
-
-   if (err != CL_SUCCESS)
-   {
-       printf("Error: Failed to execute kernel! %d\n", err);
-       exit(1);
-   }
- 
-   //Retrieve result from device
-   err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
-
-   if (err != CL_SUCCESS)
-   {
-       printf("Error: Failed to read output array! %d\n", err);
-       exit(1);
-   }
+  
  
    //print out the results
 /*
@@ -254,74 +223,126 @@ int main(int argc, char** argv)
    }
    printf("\n");
 */
-  
-   printf("Matrix multiplication completed...\n"); 
- 
-   // Cleanup
-   free(h_A);
-   free(h_B);
-   free(h_C);
- 
-   clReleaseMemObject(d_A);
-   clReleaseMemObject(d_C);
-   clReleaseMemObject(d_B);
 
-
-   /* Begin print_test kernel */
+   // BEGIN GAUSSIAN ELIMINATION
 
    // Create the compute kernel in the program we wish to run
-   kernel = clCreateKernel(program, "helloWorld", &err);
+   kernel1 = clCreateKernel(program, "step_1_row_operation", &err);
    if (!kernel || err != CL_SUCCESS)
    {
        printf("Error: Failed to create compute kernel!\n");
        exit(1);
    }
 
+    kernel2 = clCreateKernel(program, "step_2_col_operation", &err);
+   if (!kernel || err != CL_SUCCESS)
+   {
+       printf("Error: Failed to create compute kernel!\n");
+       exit(1);
+   }
+
+
    //Launch OpenCL kernel
 
-  // Setting arguments for the kernel
-   int a=0;
-   int b;  
- 
-   err = clSetKernelArg(kernel, 0, sizeof(a), (void *)&a); 
-   err |= clSetKernelArg(kernel, 1, sizeof(b), (void *)&b);
+  for(int currentRow = 0; currentRow < HA; currentRow++);{
 
-   if (err != CL_SUCCESS)
-   {
-       printf("Error: Failed to set kernel arguments! %d\n", err);
-       exit(1);
+      /************/
+      /* Kernel 1 */
+      /************/
+
+      // Setting arguments for the kernel
+     
+       err = clSetKernelArg(kernel1, 0, sizeof(cl_mem), (void *)&d_C);
+       err |= clSetKernelArg(kernel1, 1, sizeof(cl_mem), (void *)&d_A);
+       err |= clSetKernelArg(kernel1, 2, sizeof(int), (void *)&wA);
+       err |= clSetKernelArg(kernel1, 3, sizeof(int), (void *)&wC);
+       err |= clSetKernelArg(kernel1, 4, sizeof(int), (void *)&currentRow);
+
+       if (err != CL_SUCCESS)
+       {
+           printf("Error: Failed to set kernel arguments! %d\n", err);
+           exit(1);
+       }
+
+       // This is where execution of the kernel is actually done
+       err = clEnqueueNDRangeKernel(commands, kernel1, 5, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+
+       if (err != CL_SUCCESS)
+       {
+           printf("Error: Failed to execute kernel! %d\n", err);
+           exit(1);
+       }
+     
+       //Retrieve result from device
+       err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+
+       if (err != CL_SUCCESS)
+       {
+           printf("Error: Failed to read output array! %d\n", err);
+           exit(1);
+       }
+
+
+        /************/
+        /* Kernel 2 */
+        /************/
+
+       err = clSetKernelArg(kernel1, 0, sizeof(cl_mem), (void *)&d_C);
+       err |= clSetKernelArg(kernel1, 1, sizeof(cl_mem), (void *)&d_A);
+       err |= clSetKernelArg(kernel1, 2, sizeof(int), (void *)&wA);
+       err |= clSetKernelArg(kernel1, 3, sizeof(int), (void *)&wC);
+       err |= clSetKernelArg(kernel1, 4, sizeof(int), (void *)&currentRow);
+
+       if (err != CL_SUCCESS)
+       {
+           printf("Error: Failed to set kernel arguments! %d\n", err);
+           exit(1);
+       }
+
+       // This is where execution of the kernel is actually done
+       err = clEnqueueNDRangeKernel(commands, kernel2, 5, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+
+       if (err != CL_SUCCESS)
+       {
+           printf("Error: Failed to execute kernel! %d\n", err);
+           exit(1);
+       }
+     
+       //Retrieve result from device
+       err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+
+       if (err != CL_SUCCESS)
+       {
+           printf("Error: Failed to read output array! %d\n", err);
+           exit(1);
+       }
    }
- 
-   // Set local and global work sizes (this is already done earlier)
-  /* 
-   localWorkSize[0] = 16;
-   localWorkSize[1] = 16;
-   globalWorkSize[0] = 1024;
-   globalWorkSize[1] = 1024;
-   */
 
 
-   // This is where execution of the kernel is actually done
-   err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+   //print out the results
 
-   if (err != CL_SUCCESS)
+   printf("\n\nMatrix C (Results)\n");
+   int i;
+   for(i = 0; i < size_C; i++)
    {
-       printf("Error: Failed to execute kernel! %d\n", err);
-       exit(1);
+      printf("%f ", h_C[i]);
+      if(((i + 1) % WC) == 0)
+      printf("\n");
    }
- 
-   //Retrieve result from device
-   err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+   printf("\n");
 
-   if (err != CL_SUCCESS)
-   {
-       printf("Error: Failed to read output array! %d\n", err);
-       exit(1);
-   }
-   
+
 
 
    //Shutdown and cleanup
+
+   free(h_A);
+   free(h_C);
+ 
+   clReleaseMemObject(d_A);
+   clReleaseMemObject(d_C);
+   clReleaseMemObject(d_B);
+
    clReleaseProgram(program);
    clReleaseKernel(kernel);
    clReleaseCommandQueue(commands);
