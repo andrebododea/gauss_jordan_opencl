@@ -282,7 +282,7 @@ int main(int argc, char** argv)
 
        err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), (void *)&d_C);
        err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), (void *)&d_A);
-       err |= clSetKernelArg(kernel2 2, sizeof(int), (void *)&wA);
+       err |= clSetKernelArg(kernel2, 2, sizeof(int), (void *)&wA);
        err |= clSetKernelArg(kernel2, 3, sizeof(int), (void *)&wC);
        err |= clSetKernelArg(kernel2, 4, sizeof(int), (void *)&currentRow);
 
