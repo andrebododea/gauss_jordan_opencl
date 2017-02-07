@@ -235,6 +235,15 @@ int main(int argc, char** argv)
    }
 
 
+    /** QUERY WORKGROUP SIZE FOR KERNELS **/
+    size_t workgroup_size;
+    err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE,
+                                              sizeof(size_t), &workgroup_size, NULL);
+    if (err != CL_SUCCESS) { fail("Unable to get kernel work-group size"); }
+    printf("Kernel work group size is: %d\n", workgroup_size);
+
+
+
    //Launch OpenCL kernel
 
   for(int currentRow = 0; currentRow < HA; currentRow++){
