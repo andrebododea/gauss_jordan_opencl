@@ -237,7 +237,7 @@ int main(int argc, char** argv)
 
    //Launch OpenCL kernel
 
-  for(int currentRow = 0; currentRow < HA; currentRow++);{
+  for(int currentRow = 0; currentRow < HA; currentRow++){
 
       /************/
       /* Kernel 1 */
@@ -334,7 +334,6 @@ int main(int argc, char** argv)
  
    clReleaseMemObject(d_A);
    clReleaseMemObject(d_C);
-   clReleaseMemObject(d_B);
 
    clReleaseProgram(program);
    clReleaseKernel(kernel);
