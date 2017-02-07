@@ -336,7 +336,8 @@ int main(int argc, char** argv)
    clReleaseMemObject(d_C);
 
    clReleaseProgram(program);
-   clReleaseKernel(kernel);
+   clReleaseKernel(kernel1);
+   clReleaseKernel(kernel2);
    clReleaseCommandQueue(commands);
    clReleaseContext(context);
 
