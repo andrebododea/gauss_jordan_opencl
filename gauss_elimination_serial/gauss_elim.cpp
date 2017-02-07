@@ -45,9 +45,9 @@ int main()
 
 
 
-    	/********************************************/
-	/***        Gaussian elimination           ***/
-	/*******************************************/
+    /********************************************/
+	/***        Gaussian elimination          ***/
+	/********************************************/
 	float a;
 	bool a_is_zero;
 	int nonzero_row;
@@ -65,17 +65,19 @@ int main()
 
 		/** KERNEL #2 **/
 		// n^2 loop for Step 2
-		for (int row = 0; row < n; row++)
+		for (int col = 0; col < n+1; col++)
 		{
 			// Skip the row if step 1 has already been applied to it
-			if(row != currentRow)
-			{	
-				float R_j = orig_mat[row][currentRow];
-				for (int col = 0; col < n+1; col++)
-			    {
+		
+		
+			for (int row = 0; row < n; row++)
+		    {
+	    		if(row != currentRow)
+				{	
+						float R_j = orig_mat[row][currentRow];
 			        // std::cout << orig_mat[row][col] << " - " << R_j << " * " << orig_mat[currentRow][col] << std::endl;
 			        orig_mat[row][col]  = orig_mat[row][col] - R_j * orig_mat[currentRow][col];
-			    }
+		   		}
 			}
 		}
 	}
