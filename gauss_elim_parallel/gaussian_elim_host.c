@@ -12,9 +12,9 @@
 #include <stdbool.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-#define WA 1024
-#define HA 1024
-#define WB 1024
+#define WA 20
+#define HA 20
+#define WB 20
 
 #define HB WA
 #define WC WB
@@ -197,10 +197,10 @@ int main(int argc, char** argv)
    int wC = WC;
 
    // Set local and global work sizes
-   localWorkSize[0] = 16;
-   localWorkSize[1] = 16;
-   globalWorkSize[0] = 1024;
-   globalWorkSize[1] = 1024;
+   localWorkSize[0] = 5;
+   localWorkSize[1] = 5;
+   globalWorkSize[0] = 20;
+   globalWorkSize[1] = 20;
  
   
  
