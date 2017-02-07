@@ -261,7 +261,7 @@ int main(int argc, char** argv)
 
        if (err != CL_SUCCESS)
        {
-           printf("Error: Failed to execute kernel! %d\n", err);
+           printf("Error: Failed to execute kernel1! %d\n", err);
            exit(1);
        }
      
@@ -295,7 +295,7 @@ int main(int argc, char** argv)
 
        if (err != CL_SUCCESS)
        {
-           printf("Error: Failed to execute kernel! %d\n", err);
+           printf("Error: Failed to execute kernel2! %d\n", err);
            exit(1);
        }
      
