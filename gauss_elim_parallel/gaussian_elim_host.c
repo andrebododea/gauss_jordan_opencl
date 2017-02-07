@@ -279,9 +279,9 @@ int main(int argc, char** argv)
         /* Kernel 2 */
         /************/
 
-       if( d_A[0]) != 0.0) printf("Arrary problems");
+       if(h_A[currentRow*wA+currentRow] != 0.0) printf("Arrary problems, NOT CORRECT");
        
-       err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), (void *)&d_C);
+       err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), (void *)&d_C); 
        err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), (void *)&d_A);
        err |= clSetKernelArg(kernel2, 2, sizeof(int), (void *)&wA);
        err |= clSetKernelArg(kernel2, 3, sizeof(int), (void *)&currentRow);
