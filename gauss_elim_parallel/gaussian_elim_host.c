@@ -12,8 +12,8 @@
 #include <stdbool.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-#define WA 21
-#define HA 20
+#define WA 11
+#define HA 10
 #define WB 20
 
 #define HB WA
