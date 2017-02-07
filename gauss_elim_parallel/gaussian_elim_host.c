@@ -255,7 +255,7 @@ int main(int argc, char** argv)
      * different versions of a kernel.
      */
     cl_float floatVectorWidth;
-    clGetDeviceInfo(device, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT, sizeof(cl_float), &floatVectorWidth, NULL);
+    clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT, sizeof(cl_float), &floatVectorWidth, NULL);
     cout << "Prefered vector width for integers: " << floatVectorWidth << endl;
 
 
