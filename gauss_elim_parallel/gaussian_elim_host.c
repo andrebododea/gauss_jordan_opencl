@@ -199,8 +199,8 @@ int main(int argc, char** argv)
    // Set local and global work sizes
    localWorkSize[0] = 5;
    localWorkSize[1] = 5;
-   globalWorkSize[0] = 20;
-   globalWorkSize[1] = 20;
+   globalWorkSize[0] = 10;
+   globalWorkSize[1] = 10;
  
   
  
