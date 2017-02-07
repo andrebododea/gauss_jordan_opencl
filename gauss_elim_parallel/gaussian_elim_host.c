@@ -249,6 +249,16 @@ int main(int argc, char** argv)
     printf("Kernel2 work group size is: %d\n", workgroup_size);
 
 
+    /*
+     * Query the device to find out it's prefered float vector width.
+     * Although we are only printing the value here, it can be used to select between
+     * different versions of a kernel.
+     */
+    cl_float floatVectorWidth;
+    clGetDeviceInfo(device, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT, sizeof(cl_float), &floatVectorWidth, NULL);
+    cout << "Prefered vector width for integers: " << floatVectorWidth << endl;
+
+
 
    //Launch OpenCL kernel
 
