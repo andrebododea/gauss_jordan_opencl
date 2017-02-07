@@ -22,18 +22,6 @@ __kernel void step_1_row_operation(__global float* C,
     
     // A[currentRow][tx] = A[currentRow][tx]/ a;
     A[currentRow*wA+col] = A[currentRow*wA+col]/ a;
-
-
-    for (int row = 0; row < wA-1; row++)
-    {
-      // Skip the row if step 1 has already been applied to it
-      if(row != currentRow)
-      { 
-        float R_j = A[row*wA + currentRow];
-        // A[row][col]  = A[row][col] - R_j * A[currentRow][col];
-        A[row*wA + col]  = A[row*wA + col] - R_j * A[currentRow*wA + col];
-      }
-    }
 }
 
 
@@ -57,11 +45,8 @@ __kernel void step_2_col_operation(__global float* C,
     if(row != currentRow)
     { 
       float R_j = A[row*wA + currentRow];
-      
-        {
-            // A[row][col]  = A[row][col] - R_j * A[currentRow][col];
-            A[row*wA + col]  = A[row*wA + col] - R_j * A[currentRow*wA + col];
-        }
+      // A[row][col]  = A[row][col] - R_j * A[currentRow][col];
+      A[row*wA + col]  = A[row*wA + col] - R_j * A[currentRow*wA + col];
     }
   }
 }
