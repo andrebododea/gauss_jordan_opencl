@@ -266,7 +266,7 @@ int main(int argc, char** argv)
        }
      
        //Retrieve result from device
-       err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+       err = clEnqueueReadBuffer(commands, d_A, CL_TRUE, 0, mem_size_A, h_A, 0, NULL, NULL);
 
        if (err != CL_SUCCESS)
        {
@@ -300,7 +300,7 @@ int main(int argc, char** argv)
        }
      
        //Retrieve result from device
-       err = clEnqueueReadBuffer(commands, d_C, CL_TRUE, 0, mem_size_C, h_C, 0, NULL, NULL);
+       err = clEnqueueReadBuffer(commands, d_A, CL_TRUE, 0, mem_size_A, h_A, 0, NULL, NULL);
 
        if (err != CL_SUCCESS)
        {
@@ -312,12 +312,12 @@ int main(int argc, char** argv)
 
    //print out the results
 
-   printf("\n\nMatrix C (Results)\n");
+   printf("\n\nMatrix A (Results)\n");
    int i;
-   for(i = 0; i < size_C; i++)
+   for(i = 0; i < size_A; i++)
    {
-      printf("%f ", h_C[i]);
-      if(((i + 1) % WC) == 0)
+      printf("%f ", h_A[i]);
+      if(((i + 1) % WA) == 0)
       printf("\n");
    }
    printf("\n");
