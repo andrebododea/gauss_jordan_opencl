@@ -39,7 +39,7 @@ __kernel void step_2_col_operation(__global float* C,
   /** KERNEL #2 **/
   // n^2 loop for Step 2
 
-  for (int row = 0; row < wA-1; row++)
+  for (int row = 0; row < wA; row++)
   {
     // Skip the row if step 1 has already been applied to it
     if(row != currentRow)
