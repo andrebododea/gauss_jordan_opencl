@@ -235,12 +235,18 @@ int main(int argc, char** argv)
    }
 
 
-    /** QUERY WORKGROUP SIZE FOR KERNELS **/
+    /** QUERY WORKGROUP SIZE FOR KERNEL 1 **/
     size_t workgroup_size;
-    err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE,
+    err = clGetKernelWorkGroupInfo(kernel1, device_id, CL_KERNEL_WORK_GROUP_SIZE,
                                               sizeof(size_t), &workgroup_size, NULL);
-    if (err != CL_SUCCESS) { fail("Unable to get kernel work-group size"); }
-    printf("Kernel work group size is: %d\n", workgroup_size);
+    if (err != CL_SUCCESS) { fail("Unable to get kernel1 work-group size"); }
+    printf("Kernel1 work group size is: %d\n", workgroup_size);
+
+    /** QUERY WORKGROUP SIZE FOR KERNEL 2 **/
+    err = clGetKernelWorkGroupInfo(kernel2, device_id, CL_KERNEL_WORK_GROUP_SIZE,
+                                              sizeof(size_t), &workgroup_size, NULL);
+    if (err != CL_SUCCESS) { fail("Unable to get kernel2 work-group size"); }
+    printf("Kernel2 work group size is: %d\n", workgroup_size);
 
 
 
