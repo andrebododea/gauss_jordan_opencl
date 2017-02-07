@@ -257,7 +257,7 @@ int main(int argc, char** argv)
        }
 
        // This is where execution of the kernel is actually done
-       err = clEnqueueNDRangeKernel(commands, kernel1, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+       err = clEnqueueNDRangeKernel(commands, kernel1, 1, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
 
        if (err != CL_SUCCESS)
        {
@@ -293,7 +293,7 @@ int main(int argc, char** argv)
        }
 
        // This is where execution of the kernel is actually done
-       err = clEnqueueNDRangeKernel(commands, kernel2, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+       err = clEnqueueNDRangeKernel(commands, kernel2, 1, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
 
        if (err != CL_SUCCESS)
        {

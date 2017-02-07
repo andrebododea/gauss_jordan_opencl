@@ -15,7 +15,7 @@ __kernel void step_1_row_operation(__global float* C,
     // Do step 1 for each element of the current row: R_i = R_i/a_ii
 
    int col = get_global_id(0); 
-   int ty = get_global_id(1);
+   // int ty = get_global_id(1);
 
    float a = A[currentRow*wA+currentRow];
     
@@ -33,7 +33,7 @@ __kernel void step_2_col_operation(__global float* C,
 {
   
    int col = get_global_id(0); 
-   int ty = get_global_id(1);
+   // int ty = get_global_id(1);
 
 
   /** KERNEL #2 **/
