@@ -278,7 +278,9 @@ int main(int argc, char** argv)
         /************/
         /* Kernel 2 */
         /************/
-       /*
+
+       if( d_A[0]) != 0.0) printf("Arrary problems");
+       
        err = clSetKernelArg(kernel2, 0, sizeof(cl_mem), (void *)&d_C);
        err |= clSetKernelArg(kernel2, 1, sizeof(cl_mem), (void *)&d_A);
        err |= clSetKernelArg(kernel2, 2, sizeof(int), (void *)&wA);
@@ -307,7 +309,7 @@ int main(int argc, char** argv)
            printf("Error: Failed to read output array! %d\n", err);
            exit(1);
        }
-       */
+       
        
    }
 
