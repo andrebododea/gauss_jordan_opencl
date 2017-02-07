@@ -17,11 +17,11 @@ __kernel void step_1_row_operation(__global float* C,
    int col = get_global_id(0); 
    int ty = get_global_id(1);
 
-   int a = A[currentRow*wA+currentRow];
+   float a = A[currentRow*wA+currentRow];
     
     
     // A[currentRow][tx] = A[currentRow][tx]/ a;
-    A[currentRow*wA+col] = A[currentRow*wA+col]/ a;
+    A[currentRow*wA+col] = A[currentRow*wA+col]/a;
 }
 
 
