@@ -93,7 +93,8 @@ int main(int argc, char** argv)
    cl_context context;                 // compute context
    cl_command_queue commands;          // compute command queue
    cl_program program;                 // compute program
-   cl_kernel kernel;                   // compute kernel
+   cl_kernel kernel1;                   // compute kernel
+   cl_kernel kernel2;                   // compute kernel
 
     // OpenCL device memory for matrices
    cl_mem d_A;
@@ -177,26 +178,16 @@ int main(int argc, char** argv)
        exit(1);
    }
 
-   // Create the compute kernel in the program we wish to run
-   kernel = clCreateKernel(program, "matrixMul", &err);
-   if (!kernel || err != CL_SUCCESS)
-   {
-       printf("Error: Failed to create compute kernel!\n");
-       exit(1);
-   }
 
    // Create the input and output arrays in device memory for our calculation
    d_C = clCreateBuffer(context, CL_MEM_READ_WRITE, mem_size_A, NULL, &err);
    d_A = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, mem_size_A, h_A, &err);
 
-   if (!d_A || !d_B || !d_C)
+   if (!d_A || !d_C)
    {
        printf("Error: Failed to allocate device memory!\n");
        exit(1);
    }    
-    
-
-
 
 
    //Launch OpenCL kernel
@@ -230,14 +221,14 @@ int main(int argc, char** argv)
 
    // Create the compute kernel in the program we wish to run
    kernel1 = clCreateKernel(program, "step_1_row_operation", &err);
-   if (!kernel || err != CL_SUCCESS)
+   if (!kernel1 || err != CL_SUCCESS)
    {
        printf("Error: Failed to create compute kernel!\n");
        exit(1);
    }
 
     kernel2 = clCreateKernel(program, "step_2_col_operation", &err);
-   if (!kernel || err != CL_SUCCESS)
+   if (!kernel2 || err != CL_SUCCESS)
    {
        printf("Error: Failed to create compute kernel!\n");
        exit(1);
