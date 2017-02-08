@@ -11,6 +11,9 @@
 #include <CL/cl.h>
 #include <stdbool.h>
 
+// Header to allow call from gp.cc
+#include "opencl_gaussian_elimination.h" 
+
 ////////////////////////////////////////////////////////////////////////////////
 #define WA 21
 #define HA 20
@@ -22,13 +25,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
  
-// Allocates a matrix with random float entries.
-void randomMemInit(float* data, int size)
+// Allocates a matrix with random double entries.
+void randomMemInit(double* data, int size)
 {
    int i;
 
    for (i = 0; i < size; ++i)
-   	data[i] = rand() / (float)RAND_MAX;
+    data[i] = rand() / (double)RAND_MAX;
 }
 
 long LoadOpenCLKernel(char const* path, char **buf)
@@ -85,7 +88,8 @@ long LoadOpenCLKernel(char const* path, char **buf)
     return (long)fsz;
 }
 
-int main(int argc, char** argv)
+// double * run_gauss_elim(k_vector, L_matrix, n)  
+int main()
 {
    int err;                            // error code returned from api calls
 
@@ -105,16 +109,16 @@ int main(int argc, char** argv)
  
    //Allocate host memory for matrices A and B
    unsigned int size_A = WA * HA;
-   unsigned int mem_size_A = sizeof(float) * size_A;
-   float* h_A = (float*) malloc(mem_size_A);
+   unsigned int mem_size_A = sizeof(double) * size_A;
+   double* h_A = (double*) malloc(mem_size_A);
 
    //Initialize host memory
    randomMemInit(h_A, size_A);
  
    //Allocate host memory for the result C
    unsigned int size_C = WC * HC;
-   unsigned int mem_size_C = sizeof(float) * size_C;
-   float* h_C = (float*) malloc(mem_size_C);
+   unsigned int mem_size_C = sizeof(double) * size_C;
+   double* h_C = (double*) malloc(mem_size_C);
   
    printf("Initializing OpenCL device...\n"); 
 
@@ -250,13 +254,13 @@ int main(int argc, char** argv)
 
 
     /*
-     * Query the device to find out it's prefered float vector width.
+     * Query the device to find out it's prefered double vector width.
      * Although we are only printing the value here, it can be used to select between
      * different versions of a kernel.
      */
-    cl_float floatVectorWidth;
-    clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT, sizeof(cl_float), &floatVectorWidth, NULL);
-    printf("Prefered vector width for integers: %d", floatVectorWidth);
+    cl_double doubleVectorWidth;
+    clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT, sizeof(cl_double), &doubleVectorWidth, NULL);
+    printf("Prefered vector width for doubles: %d", doubleVectorWidth);
 
 
 
